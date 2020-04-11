@@ -8,9 +8,7 @@ class ServiceRegistry {
   }
 
   get(name, version) {
-    console.log(this.services);
     this.cleanup();
-    console.log(this.services);
     const candidates = Object.values(this.services)
       .filter(service => service.name === name && semver.satisfies(service.version, version));
 
@@ -43,8 +41,10 @@ class ServiceRegistry {
 
   cleanup() {
     const now = Math.floor(new Date() / 1000);
+    console.log(now);
     Object.keys(this.services).forEach((key) => {
-      if (this.services[key].timestamp + this.timeout > now) {
+      console.log(this.services[key].timestamp);
+      if (this.services[key].timestamp + this.timeout < now) {
         delete this.services[key];
         this.log.debug(`Removed service ${key}`);
       }
