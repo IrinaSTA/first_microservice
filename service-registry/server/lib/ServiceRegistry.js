@@ -36,14 +36,13 @@ class ServiceRegistry {
   unregister(name, version, ip, port) {
     const key = name + version + ip + port;
     delete this.services[key];
+    this.log.debug(`Unregistered service ${name}, version ${version}, listening at ${ip}:${port}`);
     return key;
   }
 
   cleanup() {
     const now = Math.floor(new Date() / 1000);
-    console.log(now);
     Object.keys(this.services).forEach((key) => {
-      console.log(this.services[key].timestamp);
       if (this.services[key].timestamp + this.timeout < now) {
         delete this.services[key];
         this.log.debug(`Removed service ${key}`);
